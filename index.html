@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note</title>
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Caslon', serif;
+            background-color: #FFC0CB; 
+            color: white; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+            cursor: url('https://cdn.pixabay.com/photo/2017/02/12/15/47/heart-2063725_960_720.png'), auto; /* Heart cursor */
+            padding: 0 20px;
+            flex-direction: column;
+        }
+
+        #hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            color: red;
+            animation: fallAndBounce 4s infinite;
+        }
+
+        @keyframes fallAndBounce {
+            0% {
+                opacity: 1;
+                transform: translateY(-10px) scale(1);
+            }
+            30% {
+                opacity: 0.9;
+                transform: translateY(100vh) scale(1.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(50vh) scale(1.3);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) scale(1);
+            }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #message {
+            font-size: 36px;
+            margin-top: 50px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            font-family: 'Caslon', serif;
+            font-weight: normal;
+        }
+
+        #message.show {
+            opacity: 1;
+        }
+
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .button {
+            padding: 12px 40px;
+            font-size: 24px;
+            cursor: pointer;
+            background-color: #f48fb1; 
+            border: none;
+            border-radius: 25px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-family: 'Caslon', serif;
+            font-weight: bold;
+            color: white; 
+        }
+
+        .button:hover {
+            background-color: #f06292; 
+            transform: scale(1.1);
+        }
+
+        .button:disabled {
+            background-color: #fce4ec;
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        .envelope {
+            display: none;
+            margin-top: 40px;
+            font-size: 17px;
+            background-color: #121b33; 
+            border-radius: 18px;
+            padding: 30px;
+            width: 80%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: 'Caslon', serif;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .gif-container {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .gif-container img {
+            width: 500px;  
+            height: auto;
+        }
+
+        #cool-text {
+            font-size: 28px;
+            margin-top: 20px;
+            font-family: 'Caslon', serif;
+            color: white;
+            display: none;
+            z-index: 2;
+        }
+
+        
+        .gif-options {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .gif-options button {
+            padding: 12px 40px;
+            font-size: 24px;
+            cursor: pointer;
+            background-color: #f48fb1;
+            border: none;
+            border-radius: 25px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-family: 'Caslon', serif;
+            font-weight: bold;
+            color: white; 
+        }
+
+        .gif-options button:hover {
+            background-color: #f06292; 
+            transform: scale(1.1);
+        }
+
+        /* Center everything */
+        #gif-display {
+            text-align: center;
+        }
+
+        /* Hide the "cool text" when envelope is shown */
+        #cool-text.hide {
+            display: none;
+        }
+
+        /* Video Background */
+        #background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none; 
+            z-index: -1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Video Background (hidden) -->
+    <video id="background-video" autoplay muted loop>
+        <source src="https://cdn.pixabay.com/video/2024/05/05/210824_large.mp4" type="video/mp4">
+    </video>
+
+    <div id="hearts"></div>
+
+    <div class="content">
+        <div id="message">
+            <!-- Image above the text -->
+            <div class="gif-container">
+                <img src="https://lh3.googleusercontent.com/proxy/Jjwp33iTddgziDBJyxmbxhVSY4M69n0chpml3xpGIDQYP1JEV3ZK2rZxZ4TqDmW41bG5r9JZIQk337Jft9AjEl6FTIbZh4_EW368DZ-4HDBRpg" alt="Love Gif">
+            </div>
+            <p>Do you love me?</p>
+            <div class="buttons">
+                <button class="button" onclick="showEnvelope('yes')">Yes</button>
+                <button class="button" id="no-button" disabled>No</button>
+            </div>
+        </div>
+
+        <!-- Envelope -->
+        <div id="envelope" class="envelope">
+            <p>My Dearest,</p>
+            <br>
+            <p>I know we’ve had our differences lately, and I’m sorry for the tension between us. But even in these difficult moments, I want to remind you how much you mean to me. I know I might not always show it the way I should, but you are everything to me.
+
+                You bring so much light into my life, and I truly don’t know what I would do without you. Every little thing you do, from your smile to the way you care for me, fills my heart in ways words can't fully express. No matter the ups and downs, you are the one I want by my side.
+                
+                I know I'm not perfect, but here's a little effort from my side to remind you just how much I care and how much you truly mean to me. I love you more than I can ever put into words.
+                
+                Please forgive me for any hurt I may have caused, and let's work through this together. You’re worth it, and so am I, with you.</p>
+                <br>
+                Always and forever,
+                <p>Your Love</p>
+        </div>
+
+        <!-- Text above options (after GIF) -->
+        <div id="cool-text" class="final-text hide">
+            <p>I know I'm cool. Who wouldn't love me?</p>
+        </div>
+
+        <!-- GIF to display after clicking "Yes" -->
+        <div id="gif-display" class="gif-container" style="display: none;">
+            <img src="https://i.pinimg.com/originals/57/e3/d3/57e3d3c22b0002ffdbe18188f2fe458e.gif" alt="Love Reaction GIF">
+        </div>
+
+        <!-- GIF Options after GIF -->
+        <div id="gif-options" class="gif-options" style="display: none;">
+            <button class="button" onclick="showLetter()">Yes, I love you & I won't be angry again</button>
+            <button class="button" id="no-button" disabled>You're so annoying</button>
+        </div>
+    </div>
+
+    <script>
+        //hearts falling
+        function generateHearts() {
+            const heartContainer = document.getElementById("hearts");
+            for (let i = 0; i < 100; i++) {
+                let heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.textContent = '❤️';
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${Math.random() * 4 + 4}s`; 
+                heart.style.animationDelay = `${Math.random() * 5}s`; 
+                heartContainer.appendChild(heart);
+            }
+        }
+
+        // after heart animation starts
+        window.onload = function() {
+            generateHearts();
+            setTimeout(() => {
+                document.getElementById('message').classList.add('show');
+            }, 2000); // "Do you love me?" after a short delay
+        };
+
+        // Show the GIF and options after "Yes" clicked
+        function showEnvelope(answer) {
+            if (answer === 'yes') {
+                // Hide the original message and "cool text"
+                document.getElementById('message').style.display = 'none';
+                document.getElementById('cool-text').classList.add('hide');
+
+                // the first GIF
+                document.getElementById('gif-display').style.display = 'block';
+
+                // "cool text" 
+                setTimeout(() => {
+                    document.getElementById('gif-options').style.display = 'flex';
+                }, 1500); 
+            }
+        }
+
+        // when the user clicks "Yes, I love you"
+        function showLetter() {
+            // Hide the GIF options first
+            document.getElementById('gif-options').style.display = 'none';
+
+            // 1.1 seconds before showing the envelope
+            setTimeout(() => {
+                // Hide the first GIF
+                document.getElementById('gif-display').style.display = 'none';
+
+                // Show the envelope
+                document.getElementById('envelope').style.display = 'block';
+
+                // background video after envelope appears
+                document.getElementById('background-video').style.display = 'block';
+
+            }, 1100); // Delay for envelope to appear
+        }
+    </script>
+
+</body>
+</html>
